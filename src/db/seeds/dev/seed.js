@@ -1,6 +1,6 @@
 const faker = require('faker');
 
-exports.seed = (knex, Promise) => {
+exports.seed = (knex) => {
   const tableName = 'phones';
   // Deletes ALL existing entries
   return knex(tableName).truncate()

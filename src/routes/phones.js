@@ -1,27 +1,26 @@
 const express = require('express');
-const phoneModel = require('../models/phone');
+const phoneService = require('../services/phone');
 
 const router = express.Router();
 
-router
-  .get('/', async (req, res) => {
-    const phones = (await phoneModel.listPhones());
-    res.json(phones);
-  })
-  .post('/', async (req, res) => {
-    const response = (await phoneModel.addPhone(req.body.phone));
-    res.json(response);
-  });
+const templateCallback = (method, param) => async (req, res) => {
+  let response;
+  const checkParam = p => typeof p === 'string';
+  if (checkParam(param)) {
+    const [key1, key2] = param.split('.');
+    response = (await phoneService[method](req[key1][key2]));
+  } else {
+    response = (await phoneService[method]());
+  }
+  res.json(response);
+};
 
 router
-  .get('/:phone', async (req, res) => {
-    const response = (await phoneModel.checkPhone(req.params.phone));
-    res.json(response);
-  })
-  .delete('/:phone', async (req, res) => {
-    const response = (await phoneModel.removePhone(req.params.phone));
-    // const response = (await phoneModel.deletePhone(req.params.phone));
-    res.json(response);
-  });
+  .get('/', templateCallback('listPhones'))
+  .post('/', templateCallback('addPhone', 'body.phone'));
+
+router
+  .get('/:phone', templateCallback('checkPhone', 'params.phone'))
+  .delete('/:phone', templateCallback('removePhone', 'params.phone'));
 
 module.exports = router;

@@ -42,7 +42,6 @@ const removePhone = R.pipeP(deletePhone, R.ifElse(checkDeleteResults, deleted, n
 module.exports = {
   listPhones,
   addPhone,
-  // deletePhone,
   removePhone,
   checkPhone,
 };

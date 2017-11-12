@@ -6,9 +6,7 @@ const phonesRouter = require('./routes/phones');
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-  return res.json({ msg: 'Hello World!' });
-});
+app.get('/', (req, res) => res.json({ msg: 'Hello World!' }));
 
 app.use('/phones', phonesRouter);
 
