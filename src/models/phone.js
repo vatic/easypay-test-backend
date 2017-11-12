@@ -10,8 +10,10 @@ const verifyPhone = phone =>
   /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
 
 
-const listPhones = () =>
-  knex(tableName).select('*').limit(10);
+function listPhones() {
+  console.log(knex(tableName).select('*').limit(10).toString());
+  return knex(tableName).select('*').limit(10);
+}
 
 const addPhone = phone =>
   knex(tableName).insert(phone).limit(10);

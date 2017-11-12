@@ -11,6 +11,9 @@ module.exports = {
       tableName: 'knex_migrations',
       directory: './src/db/migrations',
     },
+    seeds: {
+      directory: './src/db/seeds/dev',
+    },
   },
 
   test: {
