@@ -1,8 +1,10 @@
 const express = require('express');
 const logger = require('winston');
+const bodyParser = require('body-parser');
 const phonesRouter = require('./routes/phones');
 
 const app = express();
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   return res.json({ msg: 'Hello World!' });
