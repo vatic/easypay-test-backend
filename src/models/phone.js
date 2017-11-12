@@ -19,10 +19,30 @@ const notValid = phone => Promise.resolve({ error: `Phone: ${phone} is not valid
 
 const addPhone = R.ifElse(verifyPhone, insertPhone, notValid);
 
+const notFound = () =>
+  Promise.resolve({ error: 'Phone is not found' });
+
+const found = findResult =>
+  Promise.resolve({ success: `Phone: ${findResult.phone} is found` });
+
+const checkFindResults = o => typeof o !== 'undefined';
+
+const findPhone = phone => knex(tableName).where({ phone }).first('phone');
+
+const checkPhone = R.pipeP(findPhone, R.ifElse(checkFindResults, found, notFound));
+
+const deletePhone = phone => knex(tableName).where({ phone }).del();
+
+const deleted = () => Promise.resolve({ success: 'Phone is deleted' });
+
+const checkDeleteResults = n => parseInt(n, 10) > 0;
+
+const removePhone = R.pipeP(deletePhone, R.ifElse(checkDeleteResults, deleted, notFound));
+
 module.exports = {
   listPhones,
   addPhone,
-  // removePhone,
-  // checkPhone,
-  verifyPhone,
+  // deletePhone,
+  removePhone,
+  checkPhone,
 };
