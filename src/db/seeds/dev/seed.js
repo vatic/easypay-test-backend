@@ -8,6 +8,6 @@ exports.seed = (knex) => {
       // Inserts seed entries
       const tempAry = [...Array(10).keys()];
       const phones = tempAry.map(() => ({ phone: faker.phone.phoneNumber('###-###-####') }));
-      return knex('phones').insert(phones);
+      return knex(tableName).insert(phones);
     });
 };

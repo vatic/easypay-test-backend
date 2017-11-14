@@ -6,7 +6,9 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "seed:make": "$(npm bin)/knex seed:make",
+    "seed:run": "$(npm bin)/knex seed:run"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +24,8 @@
     "express": "4.16.2",
     "faker": "4.1.0",
     "knex": "0.14.0",
+    "node-uuid": "1.4.8",
+    "oauth2-server": "2.4.1",
     "pg": "7.4.0",
     "ramda": "0.25.0",
     "winston": "2.4.0"
