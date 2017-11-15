@@ -1,8 +1,6 @@
 const knex = require('../db/knex');
+const uuid = require('node-uuid');
 
-// In-memory datastores:
-const oauthAccessTokens = [];
-const oauthRefreshTokens = [];
 const oauthClients = [
   {
     clientId: 'react',
@@ -18,87 +16,46 @@ const authorizedClientIds = {
     'react',
   ],
 };
-const users = [
-  {
-    id: '123',
-    username: 'admin',
-    password: 'admin',
-  },
-];
-
-
-// Debug function to dump the state of the data stores
-const dump = () => {
-  console.log('oauthAccessTokens', oauthAccessTokens);
-  console.log('oauthClients', oauthClients);
-  console.log('authorizedClientIds', authorizedClientIds);
-  console.log('oauthRefreshTokens', oauthRefreshTokens);
-  console.log('users', users);
-};
 
   /*
   * Required
   */
-const getAccessToken = (bearerToken, callback) => {
-  for (let i = 0, len = oauthAccessTokens.length; i < len; i++) {
-    const elem = oauthAccessTokens[i];
-    if (elem.accessToken === bearerToken) {
-      return callback(false, elem);
-    }
+const getAccessToken = async (bearerToken, callback) => {
+  try {
+    const result = await knex('oauth_tokens').where({ access_token: bearerToken }).select('access_token', 'client_id', 'expires', 'user_id');
+    if (result.length === 0) return callback(true, false);
+    const token = result[0];
+    callback(false, {
+      accessToken: token.access_token,
+      clientId: token.client_id,
+      expires: token.expires,
+      userId: token.user_id,
+    });
+  } catch (error) {
+    callback(error);
   }
-  callback(false, false);
 };
 
-const getRefreshToken = (bearerToken, callback) => {
-  for (let i = 0, len = oauthRefreshTokens.length; i < len; i++) {
-    const elem = oauthRefreshTokens[i];
-    if (elem.refreshToken === bearerToken) {
-      return callback(false, elem);
-    }
-  }
-  callback(false, false);
-};
-
-const getClient = (clientId, clientSecret, callback) => {
-  // for (let i = 0, len = oauthClients.length; i < len; i++) {
-  //   const elem = oauthClients[i];
-  //   if (elem.clientId === clientId &&
-  //     (clientSecret === null || elem.clientSecret === clientSecret)) {
-  //     return callback(false, elem);
-  //   }
-  // }
-  // callback(false, false);
-  const client = {
-    clientId: 'react',
-    clientSecret: null,
-    redirectUri: '',
-  };
-  return callback(false, client);
-};
+const getClient = (clientId, clientSecret, callback) =>
+  callback(false, oauthClients[0]);
 
 const grantTypeAllowed = (clientId, grantType, callback) => {
   callback(false, authorizedClientIds[grantType] &&
     authorizedClientIds[grantType].indexOf(clientId.toLowerCase()) >= 0);
 };
 
-const saveAccessToken = (accessToken, clientId, expires, userId, callback) => {
-  oauthAccessTokens.unshift({
-    accessToken,
-    clientId,
-    userId,
-    expires,
-  });
-  callback(false);
-};
-
-const saveRefreshToken = (refreshToken, clientId, expires, userId, callback) =>{
-  oauthRefreshTokens.unshift({
-    refreshToken,
-    clientId,
-    userId,
-    expires,
-  });
-
+const saveAccessToken = async (accessToken, clientId, expires, userId, callback) => {
+  try {
+    await knex('oauth_tokens').insert({
+      id: uuid.v1(),
+      access_token: accessToken,
+      client_id: clientId,
+      user_id: userId.id,
+      expires,
+    });
+  } catch (error) {
+    callback(error);
+  }
   callback(false);
 };
 
@@ -110,28 +67,16 @@ const getUser = async (username, password, callback) => {
 
   try {
     const result = (await knex.raw(query, [username, password]));
-    console.log(result);
     callback(false, result.rowCount ? result.rows[0] : false);
   } catch (error) {
     callback(error, false);
   }
-
-
-  // for (let i = 0, len = users.length; i < len; i++) {
-  //   const elem = users[i];
-  //   if (elem.username === username && elem.password === password) {
-  //     return callback(false, elem);
-  //   }
-  // }
 };
 
 module.exports = {
-  dump,
-  getAccessToken,
-  getRefreshToken,
   getClient,
   grantTypeAllowed,
-  saveAccessToken,
-  saveRefreshToken,
   getUser,
+  saveAccessToken,
+  getAccessToken,
 };
