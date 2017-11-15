@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('winston');
 const bodyParser = require('body-parser');
-const phonesRouter = require('./routes/phones');
+const { restrictedPhoneRouter, checkPhoneRouter } = require('./routes/phones');
 const OAuthServer = require('oauth2-server');
 const oauthModel = require('./models/oauth');
 
@@ -18,9 +18,9 @@ app.oauth = new OAuthServer({
 
 app.all('/login', app.oauth.grant());
 
-app.get('/', app.oauth.authorise(), function (req, res) {
-  res.send('Secret area');
-});
+// app.get('/', app.oauth.authorise(), function (req, res) {
+//   res.send('Secret area');
+// });
 
 app.use(app.oauth.errorHandler());
 // app.use(app.oauth.authorize());
@@ -28,8 +28,11 @@ app.use(app.oauth.errorHandler());
 // app.post('/login', app.oauth.token());
 // app.get('/', (req, res) => res.json({ msg: 'Hello World!' }));
 
-app.use('/phones', phonesRouter);
+app.use('/phones/check', checkPhoneRouter);
+app.use('/phones', app.oauth.authorise(), restrictedPhoneRouter);
 
 app.listen(3000, () => {
   logger.info('Easypay test app listening on port 3000!');
 });
+
+module.exports = app;

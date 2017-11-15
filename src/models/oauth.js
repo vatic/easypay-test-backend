@@ -21,18 +21,19 @@ const authorizedClientIds = {
   * Required
   */
 const getAccessToken = async (bearerToken, callback) => {
+  if (!bearerToken) callback('No bearer token', false);
   try {
     const result = await knex('oauth_tokens').where({ access_token: bearerToken }).select('access_token', 'client_id', 'expires', 'user_id');
     if (result.length === 0) return callback(true, false);
     const token = result[0];
-    callback(false, {
+    return callback(false, {
       accessToken: token.access_token,
       clientId: token.client_id,
       expires: token.expires,
       userId: token.user_id,
     });
   } catch (error) {
-    callback(error);
+    return callback(error);
   }
 };
 

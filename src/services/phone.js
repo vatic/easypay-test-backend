@@ -30,6 +30,14 @@ const checkFindResults = o => typeof o !== 'undefined';
 const findPhone = phone => knex(tableName).where({ phone }).first('phone');
 
 const checkPhone = R.pipeP(findPhone, R.ifElse(checkFindResults, found, notFound));
+// const checkPhone = async (phone) => {
+//   const result = await findPhone(phone);
+//   console.log(result);
+//   if (checkFindResults(result)) {
+//     return Promise.resolve({ success: `Phone: ${result.phone} is found` });
+//   }
+//     return Promise.resolve({ error: 'Phone is not found' });
+// };
 
 const deletePhone = phone => knex(tableName).where({ phone }).del();
 
