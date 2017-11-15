@@ -6,24 +6,33 @@
   "scripts": {
     "start": "nodemon src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "seed:make": "$(npm bin)/knex seed:make",
+    "seed:run": "$(npm bin)/knex seed:run"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "chai": "4.1.2",
     "eslint": "4.10.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0",
-    "nodemon": "1.12.1"
+    "mocha": "4.0.1",
+    "nodemon": "1.12.1",
+    "nyc": "11.3.0"
   },
   "dependencies": {
     "body-parser": "1.18.2",
     "express": "4.16.2",
     "faker": "4.1.0",
     "knex": "0.14.0",
+    "node-uuid": "1.4.8",
+    "oauth2-server": "2.4.1",
     "pg": "7.4.0",
     "ramda": "0.25.0",
+    "request": "2.83.0",
+    "request-promise": "4.2.2",
     "winston": "2.4.0"
   }
 }
