@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors')
+
 const logger = require('winston');
 const bodyParser = require('body-parser');
 const { restrictedPhoneRouter, checkPhoneRouter } = require('./routes/phones');
@@ -7,6 +9,7 @@ const oauthModel = require('./models/oauth');
 
 
 const app = express();
+app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -31,8 +34,8 @@ app.use(app.oauth.errorHandler());
 app.use('/phones/check', checkPhoneRouter);
 app.use('/phones', app.oauth.authorise(), restrictedPhoneRouter);
 
-app.listen(3000, () => {
-  logger.info('Easypay test app listening on port 3000!');
+app.listen(8080, () => {
+  logger.info('Easypay test app listening on port 8080!');
 });
 
 module.exports = app;
