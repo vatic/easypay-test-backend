@@ -10,17 +10,14 @@ const checkParam = p => typeof p === 'string';
 const templateCallback = (method, param) => async (req, res) => {
   const [key1, key2] = param ? param.split('.') : [null, null];
   const paramOrNull = param ? req[key1][key2] : null;
-  const result = (await R.ifElse(
-    checkParam,
-    phoneService[method],
-    R.curryN(0, phoneService[method]),
-  )(paramOrNull));
+  const resultPromise = checkParam ? phoneService[method] : phoneService.res500;
+  const result = (await resultPromise(paramOrNull));
   if (R.has('status')(result)) res.sendStatus(result.status);
   res.json(result);
 };
 
 restrictedPhoneRouter
-  .get('/', templateCallback('listPhones'))
+  .get('/', templateCallback('listPhones', 'query.offset'))
   .post('/', templateCallback('addPhone', 'body.phone'))
   .delete('/:phone', templateCallback('removePhone', 'params.phone'));
 
