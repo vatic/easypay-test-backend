@@ -10,11 +10,13 @@ const checkParam = p => typeof p === 'string';
 const templateCallback = (method, param) => async (req, res) => {
   const [key1, key2] = param ? param.split('.') : [null, null];
   const paramOrNull = param ? req[key1][key2] : null;
-  res.json(await R.ifElse(
+  const result = (await R.ifElse(
     checkParam,
     phoneService[method],
     R.curryN(0, phoneService[method]),
   )(paramOrNull));
+  if (R.has('status')(result)) res.sendStatus(result.status);
+  res.json(result);
 };
 
 restrictedPhoneRouter

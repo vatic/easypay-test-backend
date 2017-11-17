@@ -1,5 +1,7 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
+const morgan = require('morgan')
+
 
 const logger = require('winston');
 const bodyParser = require('body-parser');
@@ -9,7 +11,14 @@ const oauthModel = require('./models/oauth');
 
 
 const app = express();
-app.use(cors());
+app.use(morgan('combined'));
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credentials: true,
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -17,6 +26,8 @@ app.oauth = new OAuthServer({
   model: oauthModel,
   grants: ['password'],
   debug: true,
+  passthroughErrors: true,
+  accessTokenLifetime: 86400,
 });
 
 app.all('/login', app.oauth.grant());
@@ -26,10 +37,6 @@ app.all('/login', app.oauth.grant());
 // });
 
 app.use(app.oauth.errorHandler());
-// app.use(app.oauth.authorize());
-
-// app.post('/login', app.oauth.token());
-// app.get('/', (req, res) => res.json({ msg: 'Hello World!' }));
 
 app.use('/phones/check', checkPhoneRouter);
 app.use('/phones', app.oauth.authorise(), restrictedPhoneRouter);

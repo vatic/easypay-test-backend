@@ -15,7 +15,7 @@ const listPhones = () => knex(tableName).select('*').limit(10);
 const insertPhone = phone =>
   knex(tableName).insert({ phone }).limit(10);
 
-const notValid = phone => Promise.resolve({ error: `Phone: ${phone} is not valid` });
+const notValid = phone => Promise.resolve({ msg: `Phone: ${phone} is not valid`, status: 422 });
 
 const addPhone = R.ifElse(verifyPhone, insertPhone, notValid);
 
@@ -30,22 +30,15 @@ const checkFindResults = o => typeof o !== 'undefined';
 const findPhone = phone => knex(tableName).where({ phone }).first('phone');
 
 const checkPhone = R.pipeP(findPhone, R.ifElse(checkFindResults, found, notFound));
-// const checkPhone = async (phone) => {
-//   const result = await findPhone(phone);
-//   console.log(result);
-//   if (checkFindResults(result)) {
-//     return Promise.resolve({ success: `Phone: ${result.phone} is found` });
-//   }
-//     return Promise.resolve({ error: 'Phone is not found' });
-// };
 
 const deletePhone = phone => knex(tableName).where({ phone }).del();
 
-const deleted = () => Promise.resolve({ success: 'Phone is deleted' });
+const deleted = () => Promise.resolve({ msg: 'Phone is deleted' });
+const notDeleted = () => Promise.resolve({ msg: 'Phone is not deleted', status: 422 });
 
 const checkDeleteResults = n => parseInt(n, 10) > 0;
 
-const removePhone = R.pipeP(deletePhone, R.ifElse(checkDeleteResults, deleted, notFound));
+const removePhone = R.pipeP(deletePhone, R.ifElse(checkDeleteResults, deleted, notDeleted));
 
 module.exports = {
   listPhones,
