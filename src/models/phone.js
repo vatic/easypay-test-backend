@@ -6,7 +6,8 @@ const listPhones = offset => knex(tableName).select('*').limit(10).offset(offset
 
 const insertPhone = phone => knex(tableName).insert({ phone });
 
-const findPhone = phone => knex(tableName).where({ phone }).first('phone');
+const findPhone = phone => knex(tableName).whereRaw('phone LIKE ?', [`${phone}%`]).select('phone');
+
 
 const deletePhone = phone => knex(tableName).where({ phone }).del();
 
