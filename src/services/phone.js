@@ -14,8 +14,7 @@ const verifyPhone = phone =>
   /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
 const notValid = phone => Promise.resolve({ msg: `Phone: ${phone} is not valid`, status: 422 });
 const notFound = () => Promise.resolve({ error: 'Phone is not found' });
-const found = findResult =>
-  Promise.resolve({ success: `Phone: ${findResult.phone} is found` });
+const found = findResult => Promise.resolve({ phones: findResult });
 const checkFindResults = o => typeof o !== 'undefined';
 const deleted = () => Promise.resolve({ msg: 'Phone is deleted' });
 const notDeleted = () => Promise.resolve({ msg: 'Phone is not deleted', status: 422 });
