@@ -6,8 +6,10 @@ exports.seed = (knex) => {
   return knex(tableName).truncate()
     .then(() => {
       // Inserts seed entries
-      const tempAry = [...Array(10).keys()];
-      const phones = tempAry.map(() => ({ phone: faker.phone.phoneNumber('###-###-####') }));
-      return knex(tableName).insert(phones);
+      const tempAry = [...Array(5).keys()];
+      const phones911 = tempAry.map(() => ({ phone: faker.phone.phoneNumber('911-###-####') }));
+      const phones921 = tempAry.map(() => ({ phone: faker.phone.phoneNumber('921-###-####') }));
+      const phones904 = tempAry.map(() => ({ phone: faker.phone.phoneNumber('904-###-####') }));
+      return knex(tableName).insert([...phones911, ...phones921, ...phones904]);
     });
 };
