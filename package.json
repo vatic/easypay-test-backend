@@ -39,6 +39,7 @@
     "lint": "eslint src",
     "seed:make": "$(npm bin)/knex seed:make",
     "seed:run": "$(npm bin)/knex seed:run",
+    "migrate:make": "$(npm bin)/knex migrate:make",
     "migrate:latest": "$(npm bin)/knex migrate:latest",
     "migrate:rollback": "$(npm bin)/knex migrate:rollback"
   }
