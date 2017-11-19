@@ -25,8 +25,16 @@ const removePhone = R.pipeP(deletePhone, R.ifElse(checkDeleteResults, deleted, n
 const checkPhone = R.pipeP(findPhone, R.ifElse(checkFindResults, found, notFound));
 const res500 = () => Promise.resolve({ msg: 'Wrong parameters', status: 500 });
 
-
 module.exports = {
+  verifyPhone,
+  notValid,
+  notFound,
+  found,
+  checkFindResults,
+  deleted,
+  notDeleted,
+  checkDeleteResults,
+
   listPhones,
   addPhone,
   removePhone,
