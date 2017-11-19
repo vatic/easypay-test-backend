@@ -2,7 +2,6 @@
 process.env.NODE_ENV = 'test';
 const { assert } = require('chai');
 const R = require('ramda');
-const knex = require('../../../src/db/knex');
 const { fakePhone, fakePhones } = require('../../util');
 
 
@@ -13,6 +12,7 @@ const {
   checkPhone,
   deleteAllPhones,
   numberOfRows,
+  insertPhones,
 } = require('../../../src/services/phone');
 
 describe('Integration', () => {
@@ -20,7 +20,9 @@ describe('Integration', () => {
 
     // const tableName = 'phones';
 
-    beforeEach(async () => await deleteAllPhones());
+    beforeEach(async () => {
+      await deleteAllPhones();
+    });
     // afterEach(async () => await deleteAllPhones());
 
     describe('#listPhones', () => {
@@ -56,6 +58,7 @@ describe('Integration', () => {
         assert.strictEqual(res.status, 422);
       });
     });
+
     describe('#removePhone', () => {
       it('should remove phone that exists in db', async () => {
         const phoneForDel = fakePhone('-');
@@ -76,6 +79,38 @@ describe('Integration', () => {
         assert.strictEqual(res.msg, 'Phone is not deleted');
         assert.strictEqual(res.status, 422);
         assert.strictEqual(parseInt(numOfRowsAfterDel, 10), parseInt(numOfRows, 10));
+      });
+    });
+    
+    describe('#checkPhone', () => {
+      it('should return phone if it exists in db', async () => {
+        const phoneForCheck = fakePhone('-');
+        await addPhone(phoneForCheck);
+        const res = (await checkPhone(phoneForCheck)).phones[0].phone;
+        assert.isString(res);
+        assert.strictEqual(res, phoneForCheck);
+      });
+      it('should return empty array if phone does not exists in db', async () => {
+        const phoneForCheck = fakePhone('-');
+        const res = (await checkPhone(phoneForCheck)).phones;
+        assert.isArray(res);
+        assert.strictEqual(res.length, 0);
+      });
+    });
+
+    describe('#deleteAllPhones', () => {
+      it('should truncate the db table', async () => {
+        const aryPhones = fakePhones(5);
+        const phones = aryPhones.map(phone => ({ phone }));
+        await insertPhones(phones);
+        const numOfRows = (await numberOfRows())[0].count;
+        const res = (await deleteAllPhones());
+        const numOfRowsAfterDel = (await numberOfRows())[0].count;
+        
+        assert.lengthOf(aryPhones, 5);
+        assert.isObject(res);
+        assert.strictEqual(parseInt(numOfRowsAfterDel + 5, 10), parseInt(numOfRows, 10));
+        assert.strictEqual(res.command, 'TRUNCATE');
       });
     });
   });

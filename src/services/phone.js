@@ -2,6 +2,7 @@ const R = require('ramda');
 const {
   listPhones,
   insertPhone,
+  insertPhones,
   findPhone,
   deletePhone,
   deleteAllPhones,
@@ -36,6 +37,7 @@ module.exports = {
   deleted,
   notDeleted,
   checkDeleteResults,
+  insertPhones,
 
   listPhones,
   addPhone,

@@ -6,6 +6,8 @@ const listPhones = offset => knex(tableName).select('*').limit(10).offset(offset
 
 const insertPhone = phone => knex(tableName).insert({ phone });
 
+const insertPhones = phones => knex(tableName).insert(phones);
+
 const findPhone = phone => knex(tableName).whereRaw('phone LIKE ?', [`${phone}%`]).select('phone');
 
 
@@ -18,6 +20,7 @@ const numberOfRows = () => knex(tableName).count();
 module.exports = {
   listPhones,
   insertPhone,
+  insertPhones,
   findPhone,
   deletePhone,
   deleteAllPhones,
