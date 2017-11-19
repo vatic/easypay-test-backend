@@ -11,19 +11,20 @@ const {
   removePhone,
   checkPhone,
   deleteAllPhones,
-  numberOfRows,
+  numOfRows,
   insertPhones,
 } = require('../../../src/services/phone');
 
 describe('Integration', () => {
   describe('Phone Service', () => {
-
-    // const tableName = 'phones';
-
+    
     beforeEach(async () => {
       await deleteAllPhones();
     });
-    // afterEach(async () => await deleteAllPhones());
+
+    afterEach(async () => {
+      await deleteAllPhones();
+    });
 
     describe('#listPhones', () => {
       it('should return list of phones', async () => {
@@ -63,22 +64,22 @@ describe('Integration', () => {
       it('should remove phone that exists in db', async () => {
         const phoneForDel = fakePhone('-');
         await addPhone(phoneForDel);
-        const numOfRows = (await numberOfRows())[0].count;
+        const rowsCount = await numOfRows();
         const res = await removePhone(phoneForDel);
-        const numOfRowsAfterDel = (await numberOfRows())[0].count;
+        const rowsCountAfterDel = await numOfRows();
         assert.isObject(res);
         assert.strictEqual(res.msg, 'Phone is deleted');
-        assert.strictEqual(parseInt(numOfRowsAfterDel + 1, 10), parseInt(numOfRows, 10));
+        assert.strictEqual(parseInt(rowsCountAfterDel + 1, 10), parseInt(rowsCount, 10));
       });
       it('should show error message if phone does not exists in db', async () => {
         const phoneForDel = fakePhone('-');
-        const numOfRows = (await numberOfRows())[0].count;
+        const rowsCount = await numOfRows();
         const res = await removePhone(phoneForDel);
-        const numOfRowsAfterDel = (await numberOfRows())[0].count;
+        const rowsCountAfterDel = await numOfRows();
         assert.isObject(res);
         assert.strictEqual(res.msg, 'Phone is not deleted');
         assert.strictEqual(res.status, 422);
-        assert.strictEqual(parseInt(numOfRowsAfterDel, 10), parseInt(numOfRows, 10));
+        assert.strictEqual(parseInt(rowsCountAfterDel, 10), parseInt(rowsCount, 10));
       });
     });
     
@@ -103,14 +104,27 @@ describe('Integration', () => {
         const aryPhones = fakePhones(5);
         const phones = aryPhones.map(phone => ({ phone }));
         await insertPhones(phones);
-        const numOfRows = (await numberOfRows())[0].count;
+        const rowsCount = await numOfRows();
         const res = (await deleteAllPhones());
-        const numOfRowsAfterDel = (await numberOfRows())[0].count;
+        const rowsCountAfterDel = await numOfRows();
         
         assert.lengthOf(aryPhones, 5);
         assert.isObject(res);
-        assert.strictEqual(parseInt(numOfRowsAfterDel + 5, 10), parseInt(numOfRows, 10));
+        assert.strictEqual(parseInt(rowsCountAfterDel + 5, 10), parseInt(rowsCount, 10));
         assert.strictEqual(res.command, 'TRUNCATE');
+      });
+    });
+
+    describe('#numberOfRows', () => {
+      it('should return number of rows', async () => {
+        const numberOfPhones = 10;
+        const aryPhones = fakePhones(numberOfPhones);
+        const phones = aryPhones.map(phone => ({ phone }));
+        await insertPhones(phones);
+        const rowsCount = await numOfRows();
+
+        assert.isNumber(rowsCount);
+        assert.strictEqual(rowsCount, numberOfPhones);
       });
     });
   });
