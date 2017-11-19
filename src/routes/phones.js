@@ -11,9 +11,8 @@ const templateCallback = (method, param) => async (req, res) => {
   const [key1, key2] = param ? param.split('.') : [null, null];
   const paramOrNull = param ? req[key1][key2] : null;
   const resultPromise = checkParam ? phoneService[method] : phoneService.res500;
-  
+
   const result = (await resultPromise(paramOrNull));
-  console.log('router', result);
   if (R.has('status')(result)) res.sendStatus(result.status);
   res.json(result);
 };
