@@ -4,6 +4,8 @@ const {
   insertPhone,
   findPhone,
   deletePhone,
+  deleteAllPhones,
+  numberOfRows,
 } = require('../models/phone');
 
 /**
@@ -40,4 +42,6 @@ module.exports = {
   removePhone,
   checkPhone,
   res500,
+  deleteAllPhones,
+  numberOfRows,
 };

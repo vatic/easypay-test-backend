@@ -1,8 +1,8 @@
 const faker = require('faker');
 
 const fakePhone = ch => faker.phone.phoneNumber(`###${ch}###${ch}####`);
-const fakePhones = () =>
-  [...Array(5).keys()].map(() => ({ phone: faker.phone.phoneNumber('###-###-####') }));
+const fakePhones = num =>
+  [...Array(num).keys()].map(() => faker.phone.phoneNumber('###-###-####'));
 
 module.exports = {
   fakePhone,
