@@ -17,13 +17,21 @@ const authorizedClientIds = {
   ],
 };
 
-  /*
-  * Required
-  */
+const tableName = 'oauth_tokens';
+
+const deleteAllTokens = () => knex.truncate(tableName);
+
+const deleteToken = token => knex(tableName).where({ access_token: token }).del();
+
+/*
+* Required
+*/
 const getAccessToken = async (bearerToken, callback) => {
   if (!bearerToken) callback('No bearer token', false);
   try {
-    const result = await knex('oauth_tokens').where({ access_token: bearerToken }).select('access_token', 'client_id', 'expires', 'user_id');
+    const result = await knex('oauth_tokens')
+      .where({ access_token: bearerToken })
+      .select('access_token', 'client_id', 'expires', 'user_id');
     if (result.length === 0) return callback(true, false);
     const token = result[0];
     return callback(false, {
@@ -80,4 +88,6 @@ module.exports = {
   getUser,
   saveAccessToken,
   getAccessToken,
+  deleteAllTokens,
+  deleteToken,
 };

@@ -10,8 +10,12 @@ const {
   checkPhone,
   deleteAllPhones,
 } = require('../../../src/services/phone');
-const { fakePhone } = require('../../util');
-const { credentials, urlEncoded, loginOptions } = require('../../util');
+const {
+  fakePhone,
+  credentials,
+  urlEncoded,
+  loginOptions,
+} = require('../../util');
 
 let token = '';
 
