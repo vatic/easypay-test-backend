@@ -68,7 +68,7 @@ describe('Integration', () => {
         const res = await removePhone(phoneForDel);
         const rowsCountAfterDel = await numOfRows();
         assert.isObject(res);
-        assert.strictEqual(res.msg, 'Phone is deleted');
+        assert.strictEqual(res.msg, '1 Phone is deleted');
         assert.strictEqual(parseInt(rowsCountAfterDel + 1, 10), parseInt(rowsCount, 10));
       });
       it('should show error message if phone does not exists in db', async () => {

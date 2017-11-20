@@ -4,7 +4,12 @@ const rp = require('request-promise');
 const { assert } = require('chai');
 const { seed } = require('../../../src/db/seeds/dev/seed');
 const knex = require('../../../src/db/knex');
-const { numOfRows, addPhone, checkPhone, listPhones } = require('../../../src/services/phone');
+const {
+  numOfRows,
+  addPhone,
+  checkPhone,
+  deleteAllPhones,
+} = require('../../../src/services/phone');
 const { fakePhone } = require('../../util');
 const { credentials, urlEncoded, loginOptions } = require('../../util');
 
@@ -26,12 +31,12 @@ describe('E2E', () => {
       await seed(knex);
     });
 
-    afterEach(async () => {
-      // await deleteAllPhones();
+    after(async () => {
+      await deleteAllPhones();
     });
 
     describe('Open Routes', () => {
-      describe('GET /phones/check', () => {
+      describe('GET /phones/check/:phone', () => {
         it('should return object with phones beginning on 921', async () => {
           const opt = Object.assign({}, options, { uri: uri('phones/check/921') });
           const res = JSON.parse(await rp(opt));
@@ -40,7 +45,7 @@ describe('E2E', () => {
           assert.strictEqual(res.phones.length, 5); // in seed file - 5 of '921'
         });
         it('should return object with array with one inserted element', async () => {
-          const phone = fakePhone('-');
+          const phone = fakePhone();
           await addPhone(phone);
           const opt = Object.assign({}, options, { uri: uri(`phones/check/${phone}`) });
           const res = JSON.parse(await rp(opt));
@@ -91,7 +96,7 @@ describe('E2E', () => {
 
       describe('POST /phones', () => {
         it('should add valid phone to db', async () => {
-          const phone = fakePhone('-');
+          const phone = fakePhone();
           const opt = Object.assign({}, options, {
             uri: uri('phones'),
             method: 'POST',
@@ -119,6 +124,42 @@ describe('E2E', () => {
 
           assert.strictEqual(res.statusCode, 422);
           assert.strictEqual(res.body, 'Unprocessable Entity');
+        });
+      });
+
+      describe('DELETE /phones/:phone', () => {
+        it('should delete phone from db if exists', async () => {
+          const phone = fakePhone();
+          await addPhone(phone);
+          const numBeroreDel = await numOfRows();
+          const opt = Object.assign({}, options, {
+            uri: uri(`phones/${phone}`),
+            method: 'DELETE',
+            headers: Object.assign({}, options.headers, { Authorization: `Bearer ${token}` }),
+          });
+          const res = JSON.parse(await rp(opt));
+          console.log(res);
+          const numAfterDel = await numOfRows();
+          assert.strictEqual(parseInt(numBeroreDel, 10) - 1, parseInt(numAfterDel, 10));
+          assert.property(res, 'msg');
+          assert.strictEqual(res.msg, '1 Phone is deleted');
+        });
+        it('should not delete phone if not exists', async () => {
+          const phone = fakePhone();
+          const numBeroreDel = await numOfRows();
+          const opt = Object.assign({}, options, {
+            uri: uri(`phones/${phone}`),
+            method: 'DELETE',
+            headers: Object.assign({}, options.headers, { Authorization: `Bearer ${token}` }),
+            resolveWithFullResponse: true,
+            simple: false,
+          });
+          const res = (await rp(opt));
+          const numAfterDel = await numOfRows();
+          
+          assert.strictEqual(res.statusCode, 422);
+          assert.strictEqual(res.body, 'Unprocessable Entity');
+          assert.strictEqual(parseInt(numBeroreDel, 10), parseInt(numAfterDel, 10));
         });
       });
     });

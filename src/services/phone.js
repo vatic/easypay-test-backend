@@ -18,7 +18,7 @@ const notValid = phone => Promise.resolve({ msg: `Phone: ${phone} is not valid`,
 const notFound = () => Promise.resolve({ error: 'Phone is not found' });
 const found = findResult => Promise.resolve({ phones: findResult });
 const checkFindResults = o => typeof o !== 'undefined';
-const deleted = () => Promise.resolve({ msg: 'Phone is deleted' });
+const deleted = num => Promise.resolve({ msg: `${num} Phone is deleted` });
 const notDeleted = () => Promise.resolve({ msg: 'Phone is not deleted', status: 422 });
 const checkDeleteResults = n => parseInt(n, 10) > 0;
 const decorateNumberOfRows = ary => parseInt(ary[0].count, 10);

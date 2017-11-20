@@ -69,8 +69,8 @@ describe('Unit', () => {
   
     describe('deleted', () => {
       it('should return promise with right message', async () => {
-        const expected = { msg: 'Phone is deleted' };
-        const actual = await deleted();
+        const expected = { msg: '1 Phone is deleted' };
+        const actual = await deleted(1);
         assert.deepEqual(actual, expected);
       });
     });
