@@ -7,6 +7,7 @@ const {
   wrongCredentials,
   urlEncoded,
   loginOptions,
+  logoutOptions,
 } = require('../../util');
 
 describe('E2E', () => {
@@ -35,6 +36,24 @@ describe('E2E', () => {
         assert.isNumber(parseInt(res.statusCode, 10));
         assert.strictEqual(parseInt(res.statusCode, 10), 500);
         assert.include(res.body, 'User credentials are invalid');
+      });
+    });
+
+    describe('/logout', () => {
+      it('should logout by removing token from db', async () => {
+        const validCredentials = urlEncoded(credentials);
+        const loginOpt = Object.assign({}, loginOptions, { body: validCredentials });
+        const loginRes = JSON.parse(await rp(loginOpt));
+        const token = loginRes.access_token;
+        const opt = Object.assign({}, logoutOptions, {
+          headers: Object.assign({}, logoutOptions.headers, { Authorization: `Bearer ${token}` }),
+          body: JSON.stringify({ token }),
+        });
+        // console.dir(opt);
+        const res = JSON.parse(await rp(opt));
+        assert.isObject(res);
+        assert.property(res, 'msg');
+        assert.strictEqual(res.msg, '1 Token is deleted');
       });
     });
   });

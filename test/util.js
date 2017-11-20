@@ -16,6 +16,16 @@ const loginOptions = {
   },
 };
 
+const logoutOptions = {
+  uri: uri('logout'),
+  method: 'POST',
+  headers: {
+    'User-Agent': 'Request-Promise',
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+};
+
 const credentials = {
   username: 'admin',
   password: 'admin',
@@ -38,6 +48,7 @@ module.exports = {
   fakePhone,
   fakePhones,
   loginOptions,
+  logoutOptions,
   credentials,
   wrongCredentials,
   urlEncoded,

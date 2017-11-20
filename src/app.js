@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const logger = require('winston');
 const bodyParser = require('body-parser');
 const { restrictedPhoneRouter, checkPhoneRouter } = require('./routes/phones');
+const { logoutRouter } = require('./routes/auth');
 const OAuthServer = require('oauth2-server');
 const oauthModel = require('./models/oauth');
 
@@ -31,6 +32,7 @@ app.oauth = new OAuthServer({
 });
 
 app.all('/login', app.oauth.grant());
+app.use('/logout', app.oauth.authorise(), logoutRouter);
 
 app.use(app.oauth.errorHandler());
 
