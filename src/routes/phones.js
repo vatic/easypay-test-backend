@@ -19,6 +19,7 @@ const templateCallback = (method, param) => async (req, res) => {
 
 restrictedPhoneRouter
   .get('/', templateCallback('listPhones', 'query.offset'))
+  .get('/total', templateCallback('numOfRows'))
   .post('/', templateCallback('addPhone', 'body.phone'))
   .delete('/:phone', templateCallback('removePhone', 'params.phone'));
 
