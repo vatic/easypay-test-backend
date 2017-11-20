@@ -2,7 +2,8 @@ const knex = require('../db/knex');
 
 const tableName = 'phones';
 
-// const listPhones = offset => knex(tableName).select('id', 'phone').limit(15).offset(offset).orderBy('id');
+// const listPhones = offset =>
+// knex(tableName).select('id', 'phone').limit(15).offset(offset).orderBy('id');
 const listPhones = () => knex(tableName).select('id', 'phone').orderBy('id');
 
 const insertPhone = phone => knex(tableName).insert({ phone });

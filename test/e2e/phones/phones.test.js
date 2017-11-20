@@ -90,7 +90,7 @@ describe('E2E', () => {
           const res = (await rp(opt));
           assert.isNumber(parseInt(res.statusCode, 10));
           assert.strictEqual(parseInt(res.statusCode, 10), 500);
-          assert.include(res.body, 'OAuth2Error')
+          assert.include(res.body, 'OAuth2Error');
         });
       });
 
@@ -138,7 +138,6 @@ describe('E2E', () => {
             headers: Object.assign({}, options.headers, { Authorization: `Bearer ${token}` }),
           });
           const res = JSON.parse(await rp(opt));
-          console.log(res);
           const numAfterDel = await numOfRows();
           assert.strictEqual(parseInt(numBeroreDel, 10) - 1, parseInt(numAfterDel, 10));
           assert.property(res, 'msg');
@@ -156,7 +155,7 @@ describe('E2E', () => {
           });
           const res = (await rp(opt));
           const numAfterDel = await numOfRows();
-          
+
           assert.strictEqual(res.statusCode, 422);
           assert.strictEqual(res.body, 'Unprocessable Entity');
           assert.strictEqual(parseInt(numBeroreDel, 10), parseInt(numAfterDel, 10));

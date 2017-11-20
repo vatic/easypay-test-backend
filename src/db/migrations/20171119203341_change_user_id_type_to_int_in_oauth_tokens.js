@@ -8,7 +8,7 @@ exports.up = (knex, Promise) => (
     }),
   ])
 );
-  
+
 exports.down = (knex, Promise) => (
   Promise.all([
     knex.schema.table('oauth_tokens', (table) => {
@@ -19,4 +19,4 @@ exports.down = (knex, Promise) => (
     }),
   ])
 );
-  
+

@@ -29,7 +29,7 @@ describe('Unit', () => {
         assert.isNotOk(verifyPhone(wrongPhone), `Phone ${wrongPhone} is not valid`);
       });
     });
-  
+
     describe('notValid', () => {
       const wrongPhone = '911-234-45-32';
       it('should return promise with right message', async () => {
@@ -38,7 +38,7 @@ describe('Unit', () => {
         assert.deepEqual(actual, expected);
       });
     });
-  
+
     describe('notFound', () => {
       it('should return promise with right message', async () => {
         const expected = { error: 'Phone is not found' };
@@ -46,7 +46,7 @@ describe('Unit', () => {
         assert.deepEqual(actual, expected);
       });
     });
-  
+
     describe('found', () => {
       it('should return promise with right message', async () => {
         const phones = fakePhones();
@@ -55,7 +55,7 @@ describe('Unit', () => {
         assert.deepEqual(actual, expected);
       });
     });
-  
+
     describe('checkfindResult', () => {
       it('should return false on undefined', () => {
         let tmp;
@@ -66,7 +66,7 @@ describe('Unit', () => {
         assert.isOk(checkFindResults(o));
       });
     });
-  
+
     describe('deleted', () => {
       it('should return promise with right message', async () => {
         const expected = { msg: '1 Phone is deleted' };
@@ -74,7 +74,7 @@ describe('Unit', () => {
         assert.deepEqual(actual, expected);
       });
     });
-  
+
     describe('notDeleted', () => {
       it('should return promise with right message', async () => {
         const expected = { msg: 'Phone is not deleted', status: 422 };
@@ -82,7 +82,7 @@ describe('Unit', () => {
         assert.deepEqual(actual, expected);
       });
     });
-  
+
     describe('checkDeleteResult', () => {
       it('should return false on zero', () => {
         assert.isNotOk(checkDeleteResults(0));

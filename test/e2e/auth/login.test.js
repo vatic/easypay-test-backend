@@ -2,7 +2,12 @@
 process.env.NODE_ENV = 'test';
 const rp = require('request-promise');
 const { assert } = require('chai');
-const { credentials, wrongCredentials, urlEncoded, loginOptions } = require('../../util');
+const {
+  credentials,
+  wrongCredentials,
+  urlEncoded,
+  loginOptions,
+} = require('../../util');
 
 describe('E2E', () => {
   describe('Auth', () => {
@@ -29,7 +34,7 @@ describe('E2E', () => {
         const res = (await rp(opt));
         assert.isNumber(parseInt(res.statusCode, 10));
         assert.strictEqual(parseInt(res.statusCode, 10), 500);
-        assert.include(res.body, 'User credentials are invalid')
+        assert.include(res.body, 'User credentials are invalid');
       });
     });
   });
