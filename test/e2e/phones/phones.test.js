@@ -4,7 +4,7 @@ const rp = require('request-promise');
 const { assert } = require('chai');
 const { seed } = require('../../../src/db/seeds/dev/seed');
 const knex = require('../../../src/db/knex');
-const { addPhone, checkPhone, listPhones } = require('../../../src/services/phone');
+const { numOfRows, addPhone, checkPhone, listPhones } = require('../../../src/services/phone');
 const { fakePhone } = require('../../util');
 const { credentials, urlEncoded, loginOptions } = require('../../util');
 
@@ -99,7 +99,6 @@ describe('E2E', () => {
             body: JSON.stringify({ phone }),
           });
           const res = JSON.parse(await rp(opt));
-          console.log(res);
           assert.strictEqual(res.command, 'INSERT');
           assert.strictEqual(res.rowCount, 1);
           const insertedPhone = (await checkPhone(phone)).phones[0].phone;
@@ -113,15 +112,13 @@ describe('E2E', () => {
             method: 'POST',
             headers: Object.assign({}, options.headers, { Authorization: `Bearer ${token}` }),
             body: JSON.stringify({ phone }),
+            resolveWithFullResponse: true,
+            simple: false,
           });
           const res = (await rp(opt));
-          const list = await listPhones();
-          console.log(list);
-          // assert.strictEqual(res.command, 'INSERT');
-          // assert.strictEqual(res.rowCount, 1);
-          // const insertedPhone = (await checkPhone(phone)).phones[0].phone;
-          // assert.isString(insertedPhone);
-          // assert.strictEqual(phone, insertedPhone);
+
+          assert.strictEqual(res.statusCode, 422);
+          assert.strictEqual(res.body, 'Unprocessable Entity');
         });
       });
     });

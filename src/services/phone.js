@@ -11,10 +11,9 @@ const {
 
 /**
  * Verify phone number.
- * @param  {string} phone - XXX-XXX-XXXXX or XXX.XXX.XXXX or XXX XXX XXXX
+ * @param  {string} phone - XXX-XXX-XXXXX
  */
-const verifyPhone = phone =>
-  /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test(phone);
+const verifyPhone = phone => /^([0-9]{3})\-([0-9]{3})\-([0-9]{4})$/.test(phone);
 const notValid = phone => Promise.resolve({ msg: `Phone: ${phone} is not valid`, status: 422 });
 const notFound = () => Promise.resolve({ error: 'Phone is not found' });
 const found = findResult => Promise.resolve({ phones: findResult });

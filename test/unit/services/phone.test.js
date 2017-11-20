@@ -21,12 +21,8 @@ describe('Unit', () => {
   describe('Phone Service', () => {
     describe('verifyPhone', () => {
       it('should return true on valid phone', () => {
-        const phone1 = fakePhone('-');
-        const phone2 = fakePhone('.');
-        const phone3 = fakePhone(' ');
-        assert.isOk(verifyPhone(phone1), `Phone ${phone1} is valid`);
-        assert.isOk(verifyPhone(phone2), `Phone ${phone2} is valid`);
-        assert.isOk(verifyPhone(phone3), `Phone ${phone3} is valid`);
+        const phone = fakePhone('-');
+        assert.isOk(verifyPhone(phone), `Phone ${phone} is valid`);
       });
       it('should return false on not valid phone', () => {
         const wrongPhone = '911-234-45-32';
