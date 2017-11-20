@@ -17,7 +17,6 @@ const {
 
 describe('Integration', () => {
   describe('Phone Service', () => {
-    
     beforeEach(async () => {
       await deleteAllPhones();
     });
@@ -55,7 +54,7 @@ describe('Integration', () => {
         const phone = '123456789';
         const res = await addPhone(phone);
         assert.isObject(res);
-        assert.strictEqual(res.msg, `Phone: ${phone} is not valid`)
+        assert.strictEqual(res.msg, `Phone: ${phone} is not valid`);
         assert.strictEqual(res.status, 422);
       });
     });
@@ -68,7 +67,7 @@ describe('Integration', () => {
         const res = await removePhone(phoneForDel);
         const rowsCountAfterDel = await numOfRows();
         assert.isObject(res);
-        assert.strictEqual(res.msg, 'Phone is deleted');
+        assert.strictEqual(res.msg, '1 Phone is deleted');
         assert.strictEqual(parseInt(rowsCountAfterDel + 1, 10), parseInt(rowsCount, 10));
       });
       it('should show error message if phone does not exists in db', async () => {
@@ -82,7 +81,7 @@ describe('Integration', () => {
         assert.strictEqual(parseInt(rowsCountAfterDel, 10), parseInt(rowsCount, 10));
       });
     });
-    
+
     describe('#checkPhone', () => {
       it('should return phone if it exists in db', async () => {
         const phoneForCheck = fakePhone('-');
@@ -107,7 +106,7 @@ describe('Integration', () => {
         const rowsCount = await numOfRows();
         const res = (await deleteAllPhones());
         const rowsCountAfterDel = await numOfRows();
-        
+
         assert.lengthOf(aryPhones, 5);
         assert.isObject(res);
         assert.strictEqual(parseInt(rowsCountAfterDel + 5, 10), parseInt(rowsCount, 10));

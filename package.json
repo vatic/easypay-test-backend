@@ -36,9 +36,10 @@
     "start": "nodemon src/app.js",
     "test": "mocha --exit --timeout 10000 test/**/*.js",
     "test:coverage": "nyc npm test",
-    "lint": "eslint src",
+    "lint": "eslint src test",
     "seed:make": "$(npm bin)/knex seed:make",
     "seed:run": "$(npm bin)/knex seed:run",
+    "migrate:make": "$(npm bin)/knex migrate:make",
     "migrate:latest": "$(npm bin)/knex migrate:latest",
     "migrate:rollback": "$(npm bin)/knex migrate:rollback"
   }
