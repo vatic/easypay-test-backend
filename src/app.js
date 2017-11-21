@@ -8,39 +8,31 @@ const bodyParser = require('body-parser');
 const { restrictedPhoneRouter, checkPhoneRouter } = require('./routes/phones');
 const { logoutRouter } = require('./routes/auth');
 const OAuthServer = require('oauth2-server');
-const oauthModel = require('./models/oauth');
 
 
-const app = express();
-app.use(morgan('combined'));
+module.exports = (config) => {
+  const { corsOptions, oauthOptions, PORT } = config;
 
-const corsOptions = {
-  origin: 'http://localhost:3000',
-  credentials: true,
-  optionsSuccessStatus: 200,
+  const app = express();
+  app.use(morgan('combined'));
+
+  app.use(cors(corsOptions));
+
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.json());
+  app.oauth = new OAuthServer(oauthOptions);
+
+  app.all('/login', app.oauth.grant());
+  app.use('/logout', app.oauth.authorise(), logoutRouter);
+
+  app.use(app.oauth.errorHandler());
+
+  app.use('/phones/check', checkPhoneRouter);
+  app.use('/phones', app.oauth.authorise(), restrictedPhoneRouter);
+
+  app.listen(PORT, () => {
+    logger.info(`Easypay test app listening on port ${PORT}!`);
+  });
 };
-app.use(cors(corsOptions));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.oauth = new OAuthServer({
-  model: oauthModel,
-  grants: ['password'],
-  debug: true,
-  passthroughErrors: true,
-  accessTokenLifetime: 86400,
-});
-
-app.all('/login', app.oauth.grant());
-app.use('/logout', app.oauth.authorise(), logoutRouter);
-
-app.use(app.oauth.errorHandler());
-
-app.use('/phones/check', checkPhoneRouter);
-app.use('/phones', app.oauth.authorise(), restrictedPhoneRouter);
-
-app.listen(8080, () => {
-  logger.info('Easypay test app listening on port 8080!');
-});
-
-module.exports = app;
+// module.exports = app;
