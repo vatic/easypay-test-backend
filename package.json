@@ -4,8 +4,13 @@
   "description": "Test task for EasyPay",
   "main": "src/app.js",
   "keywords": [],
-  "author": "",
+  "author": "s.vatagin@gmail.com",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/vatic/easypay-test-backend.git"
+  },
   "license": "MIT",
+  "engines" : { "node" : ">=8.9.0" },
   "devDependencies": {
     "chai": "4.1.2",
     "eslint": "4.10.0",
