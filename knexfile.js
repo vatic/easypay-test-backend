@@ -34,12 +34,13 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: {
-      host: 'pgsql.instatfootball.tv',
-      user: process.env.PHONEBOOK_USER,
-      password: process.env.PHONEBOOK_PWD,
-      database: 'phonebook',
-    },
+    connection: process.env.PG_CONNECTION_URL,
+    // connection: {
+    //   host: 'pgsql.instatfootball.tv',
+    //   user: process.env.PHONEBOOK_USER,
+    //   password: process.env.PHONEBOOK_PWD,
+    //   database: 'postgresql-silhouetted-35919',
+    // },
     migrations: {
       tableName: 'knex_migrations',
       directory: './src/db/migrations',
