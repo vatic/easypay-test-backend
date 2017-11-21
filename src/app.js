@@ -22,6 +22,7 @@ module.exports = (config) => {
   app.use(bodyParser.json());
   app.oauth = new OAuthServer(oauthOptions);
 
+  app.all('/', (req, res) => res.json({ root: 'This is API server for esypay-test' }));
   app.all('/login', app.oauth.grant());
   app.use('/logout', app.oauth.authorise(), logoutRouter);
 
