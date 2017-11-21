@@ -14,13 +14,25 @@
 
 ```curl -s -X POST -H "Content-type: application/x-www-form-urlencoded" -H "Accept: application/json" -d "username=admin&password=admin&grant_type=password&client_id=react&client_secret=null" https://easypay-test-backend.herokuapp.com/login | jq .```
 
+##### Logout:
+
+```curl -s -X POST -H "Authorization: Bearer <token>" -H "Content-type: application/json" -d '{ "token": "<token>"}' -H "Accept: application/json" https://easypay-test-backend.herokuapp.com/logout | jq .```
+
 ##### Phones list:
 
 Token брать из ответа на логин.
 
 ```curl -s -X GET -H "Authorization: Bearer <token>" -H "Content-type: application/json" -H "Accept: application/json" https://easypay-test-backend.herokuapp.com/phones\?offset\=10 | jq .```
 
-#### Установка на свой компьютер (линукс, мак):
+##### Add phone:
+
+```curl -s -X POST -H "Authorization: Bearer <token>" -H "Content-type: application/json" -H "Accept: application/json" -d '{ "phone": "XXX-XXX-XXXX"}' https://easypay-test-backend.herokuapp.com/phones | jq .```
+
+##### Delete phone:
+
+```curl -s -X DELETE -H "Authorization: Bearer de9795dcd0adb71b82cdbe0e65dde3cd57100036" -H "Content-type: application/json" -H "Accept: application/json" https://easypay-test-backend.herokuapp.com/phones/901-344-0103 | jq .```
+
+### Установка на свой компьютер (линукс, мак):
 
 ```nvm install 8.9.1``` или можно свежую 9.2.0
 
