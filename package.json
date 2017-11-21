@@ -38,7 +38,7 @@
     "winston": "2.4.0"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "test": "mocha --exit --timeout 10000 test/**/*.js",
     "test:coverage": "nyc npm test",
     "lint": "eslint src test",
