@@ -34,7 +34,7 @@ module.exports = {
 
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL
+    connection: process.env.DATABASE_URL,
     // connection: {
     //   host: 'pgsql.instatfootball.tv',
     //   user: process.env.PHONEBOOK_USER,
