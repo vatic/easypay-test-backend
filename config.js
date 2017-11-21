@@ -1,7 +1,7 @@
 const oauthModel = require('./src/models/oauth');
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'https://easypay-test-frontend.herokuapp.com'],
   credentials: true,
   optionsSuccessStatus: 200,
 };
