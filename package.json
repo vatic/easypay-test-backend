@@ -5,21 +5,23 @@
   "main": "src/app.js",
   "keywords": [],
   "author": "s.vatagin@gmail.com",
-  "repository" : {
-    "type" : "git",
-    "url" : "https://github.com/vatic/easypay-test-backend.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vatic/easypay-test-backend.git"
   },
   "license": "MIT",
-  "engines" : { "node" : ">=8.9.0" },
+  "engines": {
+    "node": ">=8.9.0"
+  },
   "devDependencies": {
     "chai": "4.1.2",
-    "eslint": "4.10.0",
+    "eslint": "^4.19.1",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-mocha": "4.11.0",
     "mocha": "4.0.1",
-    "nodemon": "1.12.1",
-    "nyc": "11.3.0",
+    "nodemon": "^1.17.5",
+    "nyc": "^12.0.2",
     "sinon": "4.1.2"
   },
   "dependencies": {
@@ -27,13 +29,13 @@
     "cors": "2.8.4",
     "express": "4.16.2",
     "faker": "4.1.0",
-    "knex": "0.14.0",
+    "knex": "^0.14.6",
     "morgan": "1.9.0",
     "node-uuid": "1.4.8",
     "oauth2-server": "2.4.1",
     "pg": "7.4.0",
     "ramda": "0.25.0",
-    "request": "2.83.0",
+    "request": "^2.87.0",
     "request-promise": "4.2.2",
     "winston": "2.4.0"
   },
